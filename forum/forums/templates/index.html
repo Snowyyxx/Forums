@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method='get' action='.'>
+    <div class="mb-4">
+        {{ form.query.label_tag }} <!-- Ensures label is rendered -->
+        <input type="text" name="query" id="query" value="{{ form.query.value }}" class="form-control block w-full p-2 rounded-md border border-gray-600 bg-gray-900 text-white" placeholder="Search..." required>
+    </div>
+    <button type="submit" class='bg-gray-800 hover:bg-gray-700 text-white font-bold px-4 rounded border-2 border-black'>Search</button>
+</form>
+
+<div class='container bg-[#e28743] rounded flex flex-col justify-center items-center w-full h-screen p-4'>
+    <div class='title text-center mb-6'>
+        <h1 class='text-white text-4xl font-bold'>Thoughts Posted Till Date</h1>
+    </div>
+    
+    <form method="post" action="{% url 'delete-thoughts' %}">
+        {% csrf_token %}
+        <div class='thoughts w-full max-w-4xl'>
+            {% for i in thoughts %}
+                <div class='flex items-center mb-4'>
+                    <input type='checkbox' name='deleted-thoughts' value='{{ i.thought_id }}' class='mr-4'>
+                    <div class='display bg-gray-800 text-white p-4 rounded-lg shadow-lg w-full'>
+                        <h2 class='text-2xl font-semibold mb-2'>{{ i.topic }}</h2>
+                        <p class='text-lg'>{{ i.desc }}</p>
+                        <button type='button' class='btn btn-primary' onclick="likeThought({{i.thought_id}})">Like</button>
+                        <button type='button' class='btn btn-primary' onclick ="dislikeThought({{i.thought_id}})">Dislike</button>
+                    </div>
+                    <h3 class='text-lg' id= 'likes-count-{{i.thought_id}}'>Likes: {{i.likes}}</h3>
+                    <br>
+                    <h3 class='text-lg' id= 'dislikes-count-{{i.thought_id}}'>Dislikes: {{i.dislikes}}</h3>
+
+                </div>
+            {% endfor %}
+        </div>
+        <button type='submit' class='bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4'>Delete Selected</button>
+    </form>
+
+</div>
+{% endblock %}
+
+{%block scripts%}
+
+<script>
+
+    function dislikeThought(thoughtId){
+        fetch('/dislike_thoughts',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+            },
+            body: JSON.stringify({thoughtId:thoughtId})
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            document.getElementById('dislikes-count-'+thoughtId).innerText=data.dislikes;
+            document.getElementById('likes-count-'+thoughtId).innerText=data.likes;
+    })
+    }
+
+    function likeThought(thoughtId) {
+        fetch('/like_thoughts', {  // Ensure the path is correct and matches the Django URL name
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ thoughtId: thoughtId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('likes-count-'+thoughtId).innerText=data.likes;
+        })
+    }
+</script>
+{%endblock%}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Forum{% endblock %}</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8G+5ErPpFALm9X6/+V7K3moJI/aX4iV98" crossorigin="anonymous">
+
+<!-- Optional JavaScript; choose one of the two! -->
+
+<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-Ltrj3KBYlZARCyrZ5WB/L8+AEj/+GCXx1U6RPI1lSZOm5h4nU4t+fWVoCFOw/sm5" crossorigin="anonymous"></script>
+
+</head>
+<body class="bg-gray-900 text-white">
+    <div class='fixed top-0 left-0 w-full bg-gray-800 z-10'>
+        
+        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+            <a class="navbar-brand text-white font-bold text-xl" href="{% url 'forum-home' %}">Forum</a>
+            <div class="flex space-x-4">
+                <a class="nav-link text-white" href="{% url 'forum-home' %}">Home</a>
+                <a class="nav-link text-white" href="{% url 'create-thought' %}">Create Thought</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto mt-16">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    {% block body %} {% endblock %}
+    {%block scripts%} {%endblock%}
+</body>
+</html>
